@@ -1,11 +1,13 @@
 from __future__ import annotations
 
-from collections.abc import Sequence
+import numpy as np
 
 from ports import ConversationModel, Message, SpeechRecognizer, SpeechSynthesizer, VoiceActivityDetector
 
 
 class VoiceConversation:
+    """Drives one turn of listen -> transcribe -> reply -> speak."""
+
     def __init__(self, detector: VoiceActivityDetector, recognizer: SpeechRecognizer,
                  model: ConversationModel, synthesizer: SpeechSynthesizer,
                  language: str | None = None) -> None:
@@ -14,15 +16,19 @@ class VoiceConversation:
         self._model = model
         self._synthesizer = synthesizer
         self._language = language
-        self._messages = [Message("system", "You are Oviya, a concise and friendly local voice assistant.")]
+        self._messages = [Message("system", "You are Vaani, a friendly local voice assistant.")]
 
     @property
     def messages(self) -> tuple[Message, ...]:
         return tuple(self._messages)
 
-    def process_turn(self, audio: Sequence[float] | None = None) -> str | None:
+    @property
+    def last_message(self) -> Message:
+        return self._messages[-1]
+
+    def process_turn(self, audio: np.ndarray | None = None) -> str | None:
         audio = audio if audio is not None else self._detector.record_turn()
-        if not audio:
+        if audio is None or len(audio) == 0:
             return None
         text = self._recognizer.transcribe(audio, self._language)
         if not text:

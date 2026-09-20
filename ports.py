@@ -1,8 +1,9 @@
 from __future__ import annotations
 
-from collections.abc import Sequence
 from dataclasses import dataclass
 from typing import Protocol
+
+import numpy as np
 
 
 @dataclass(frozen=True)
@@ -12,11 +13,11 @@ class Message:
 
 
 class SpeechRecognizer(Protocol):
-    def transcribe(self, audio: Sequence[float], language: str | None = None) -> str: ...
+    def transcribe(self, audio: np.ndarray, language: str | None = None) -> str: ...
 
 
 class VoiceActivityDetector(Protocol):
-    def record_turn(self) -> Sequence[float] | None: ...
+    def record_turn(self) -> np.ndarray | None: ...
 
 
 class ConversationModel(Protocol):
@@ -25,4 +26,3 @@ class ConversationModel(Protocol):
 
 class SpeechSynthesizer(Protocol):
     def speak(self, text: str) -> None: ...
-
