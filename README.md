@@ -1,12 +1,59 @@
 # Vaani
 
-Vaani is a small local voice assistant that connects:
+Vaani is an open-source, local-first personal agent that aims to be an
+always-available "Jarvis" for your devices. It should converse naturally,
+remember context with permission, and safely take action while keeping users
+in control of their data.
+
+Today, Vaani is an early macOS-first voice assistant that connects:
 
 ```text
 microphone → faster-whisper → Ollama → Piper → speakers
 ```
 
 The conversation stays on your Mac when Ollama, Whisper, Silero VAD, and Piper are all configured with local models. No ChatGPT, LiveKit Cloud, or paid API is required.
+
+## Product principles
+
+- **Local first:** voice, transcripts, and context stay on the user's device by
+  default.
+- **Always available, never silently powerful:** listening and acting states
+  must be visible, and consequential actions require confirmation.
+- **Replaceable components:** speech recognition, language models, speech
+  synthesis, memory, and tools remain swappable.
+- **Natural interaction:** low latency, interruption, concise spoken responses,
+  and multilingual support are first-class goals.
+- **One assistant, multiple trusted devices:** desktop and mobile clients share
+  an assistant identity without obscuring where data lives or actions run.
+
+## MVP: Reliable Local Agent
+
+The first milestone is a dependable macOS-first agent that can activate
+intentionally, hold a natural voice conversation, and run a small set of safe
+tools with explicit approval.
+
+The MVP includes speech-safe responses, interruption, wake-word or push-to-talk
+activation, visible runtime states, configurable local models, session context,
+a typed tool contract, confirmation for consequential actions, startup
+diagnostics, privacy documentation, automated tests, and contributor guidance.
+
+Long-term memory, autonomous proactive behavior, mobile and Windows apps,
+cross-device synchronization, and broad desktop automation are intentionally
+post-MVP.
+
+## Roadmap
+
+| Phase | Outcome |
+|---|---|
+| Reliable Local Agent | A stable, private, contributor-ready macOS MVP |
+| Memory and Personalization | User-controlled preferences and durable context |
+| Desktop Experience | Native macOS experience followed by Windows support |
+| Mobile Companion | iOS and Android conversations, notifications, and approvals |
+| Cross-Device Agent | Secure continuity and explicit execution across trusted devices |
+
+Implementation is tracked in the
+[Vaani issues](https://github.com/sridevs/vaani/issues) and
+[Vaani Roadmap](https://github.com/users/sridevs/projects/1).
 
 ## Requirements
 
@@ -116,7 +163,22 @@ All tests under `tests/` run together as a single suite. To run just one group, 
 
 ```bash
 python -m pytest -v -m adapters      # only adapters/ tests
-python -m pytest -v -m components   # only components/ tests
+python -m pytest -v -m application   # only application/ tests
 ```
 
 This first version uses turn-based replies. Silero VAD detects when you stop speaking; full barge-in cancellation while Vaani is speaking is the next improvement.
+
+## Contributing
+
+Contributions are welcome. Start with
+[CONTRIBUTING.md](CONTRIBUTING.md), then choose a ready issue labeled
+[`good first issue`](https://github.com/sridevs/vaani/labels/good%20first%20issue)
+or [`help wanted`](https://github.com/sridevs/vaani/labels/help%20wanted).
+
+By participating, you agree to follow the [Code of Conduct](CODE_OF_CONDUCT.md).
+Security concerns should be reported as described in [SECURITY.md](SECURITY.md),
+not in a public issue.
+
+## License
+
+Vaani is licensed under the [Apache License 2.0](LICENSE).

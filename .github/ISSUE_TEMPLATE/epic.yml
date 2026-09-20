@@ -1,0 +1,52 @@
+name: Epic
+description: Define a product outcome spanning multiple independently deliverable stories
+title: "[Epic] "
+labels:
+  - epic
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Epics describe outcomes, boundaries, and success measures. Implementation belongs in linked stories.
+  - type: textarea
+    id: outcome
+    attributes:
+      label: Desired outcome
+      description: What becomes possible for users or contributors?
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What prevents that outcome today?
+    validations:
+      required: true
+  - type: textarea
+    id: success
+    attributes:
+      label: Success measures
+      description: List observable signals that show the outcome has been achieved.
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: In scope
+    validations:
+      required: true
+  - type: textarea
+    id: exclusions
+    attributes:
+      label: Out of scope
+    validations:
+      required: true
+  - type: textarea
+    id: stories
+    attributes:
+      label: Child stories
+      description: Add linked issues as the epic is decomposed.
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: Dependencies and risks

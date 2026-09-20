@@ -1,0 +1,51 @@
+name: User story
+description: Propose one independently valuable, estimable, small, and testable change
+title: "[Story] "
+labels:
+  - story
+body:
+  - type: textarea
+    id: story
+    attributes:
+      label: User story
+      description: State who needs one capability and why.
+      placeholder: |
+        As a ...
+        I want ...
+        so that ...
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: Explain the current limitation and user value.
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: List observable and testable outcomes, including important failure behavior.
+      placeholder: |
+        - [ ] ...
+        - [ ] ...
+    validations:
+      required: true
+  - type: textarea
+    id: exclusions
+    attributes:
+      label: Out of scope
+      description: State what this story intentionally does not solve.
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: Technical notes
+      description: Optional constraints or architectural context without prescribing the full implementation.
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: Dependencies
+      description: Link only genuine prerequisite issues.
