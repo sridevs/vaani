@@ -88,7 +88,7 @@ source .venv/bin/activate       # after creating the venv in the Setup section b
 python -m pip install piper-tts
 ```
 
-**4. A Piper voice model** — download a `.onnx` voice (and its matching `.onnx.json` config) from the [Piper voices repository](https://huggingface.co/rhasspy/piper-voices/tree/main). Example, English voice:
+**4. A Piper voice model** — download a `.onnx` voice (and its matching `.onnx.json` config) for your preferred language from the [Piper voices repository](https://huggingface.co/rhasspy/piper-voices/tree/main). Keep both files together and use the `.onnx` path with `--voice`:
 
 ```bash
 mkdir -p ~/piper-voices
@@ -122,6 +122,61 @@ ollama list
 
 The first run downloads the faster-whisper and Silero VAD model files. After that, they run locally. Keep the Piper voice model somewhere on your Mac and note its full path.
 
+## Privacy and permissions
+
+Vaani's MVP is local-first by default. With the documented local adapters,
+audio is captured from the microphone, transcribed by faster-whisper, sent as
+messages to the Ollama server configured by `VAANI_OLLAMA_HOST`, converted to
+speech by the local Piper process, and played through the selected speakers:
+
+```text
+microphone audio → local Whisper model → in-memory conversation → local Ollama
+                                                    ↓
+                                      local Piper → speakers
+```
+
+- **Audio:** microphone samples are held while the current turn is recorded
+  and transcribed. Vaani does not write audio recordings or upload them.
+- **Transcripts and conversation:** the recognized text and assistant replies
+  are kept in the current process so later turns can use context. They are not
+  written to transcript files, durable memory, or an external service by the
+  MVP.
+- **Models:** model files are local after download. faster-whisper and Silero
+  may download model weights on first use, and the Piper voice model is
+  downloaded separately by the user; review those providers and cache
+  locations if the machine has restricted data requirements.
+- **Tools:** the MVP does not grant tools or desktop automation permissions.
+  Future tools must declare their access, keep provider-specific behavior out
+  of the core, and require explicit confirmation for consequential actions.
+
+The default Ollama endpoint is `http://127.0.0.1:11434`; `VAANI_OLLAMA_HOST`
+is the configuration that changes it. Pointing that setting at another host is
+an explicit opt-in to sending conversation messages off-device. There is no
+other off-device conversation or telemetry integration enabled by default.
+Vaani does not provide a remote-provider privacy guarantee when this setting
+is changed, so review the destination's retention and deletion terms first.
+
+The operating system may require permission for:
+
+- **Microphone:** required to record a turn. Grant access to the terminal or
+  Python application in macOS System Settings → Privacy & Security →
+  Microphone.
+- **Filesystem:** required to read the configured local Whisper and Piper model
+  caches and the `--voice` file. Vaani does not request broad filesystem access.
+- **Network:** used by the local Ollama HTTP endpoint and, during setup or
+  first model use, by the separately managed model downloads. No network
+  access is needed to send audio to a hosted speech service.
+- **Future tools:** any tool that reads or changes files, runs commands, or
+  accesses another service must document that permission and its data flow
+  before it is enabled.
+
+By default, process-held audio and conversation context disappear when Vaani
+stops. The current MVP has no user-facing durable retention or deletion
+control because it does not create those records; model caches remain until
+the user removes them using the relevant provider's documented cache path.
+For security concerns, follow the private reporting instructions in
+[SECURITY.md](SECURITY.md) rather than opening a public issue.
+
 ## Run
 
 Replace the model names and paths with the ones on your Mac:
@@ -134,7 +189,7 @@ python -m vaani \
   --voice /path/to/en_US-lessac-medium.onnx
 ```
 
-For Tamil recognition, use `--language ta`. Whisper can recognize Tamil, but Piper voice availability depends on the voice model you install. If the Piper voice does not support Tamil, use an English voice for the first test and swap the TTS component later.
+Set `--language` to the language code you want Whisper to recognize, or omit it for automatic language detection. Whisper supports multiple languages; Piper voice availability and output language depend on the voice model you install. Choose a Piper voice that supports your target language.
 
 Useful environment variables are also supported: `VAANI_OLLAMA_MODEL`, `VAANI_OLLAMA_HOST`, `VAANI_WHISPER_MODEL`, `VAANI_LANGUAGE`, and `VAANI_PIPER`.
 
@@ -178,6 +233,23 @@ or [`help wanted`](https://github.com/sridevs/vaani/labels/help%20wanted).
 By participating, you agree to follow the [Code of Conduct](CODE_OF_CONDUCT.md).
 Security concerns should be reported as described in [SECURITY.md](SECURITY.md),
 not in a public issue.
+
+### Commit messages
+
+Lead with the issue or story number, followed by a short Conventional
+Commit-style type and imperative summary:
+
+```text
+[#<issue-number>] <type>: <imperative summary>
+```
+
+For example:
+
+```text
+[#27] docs: clarify privacy, permissions, and language setup
+```
+
+Use types such as `feat`, `fix`, `docs`, `test`, `refactor`, or `chore`.
 
 ## License
 
