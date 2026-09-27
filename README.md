@@ -193,6 +193,31 @@ Set `--language` to the language code you want Whisper to recognize, or omit it 
 
 Useful environment variables are also supported: `VAANI_OLLAMA_MODEL`, `VAANI_OLLAMA_HOST`, `VAANI_WHISPER_MODEL`, `VAANI_LANGUAGE`, and `VAANI_PIPER`.
 
+### A sample response
+
+Asked to introduce itself in verse, a local Llama 3.2 model running entirely on
+one Mac answered:
+
+```text
+In the land of code and circuits bright
+Where data flows and information takes flight
+There's a world of wonder waiting to be found
+In the realm of AI, where knowledge abounds
+
+Vaani's the name, and chat is the game
+We'll talk and laugh, and have a good time, it's not lame
+I'll answer your questions, and help you out too
+In this virtual space, where friendship shines through
+
+So come along, don't be shy
+We'll have a conversation, and reach for the sky
+With language and logic, we'll navigate the way
+And find the answers, come what may
+```
+
+No API key, no cloud account, no network round trip. Language models are not
+deterministic, so your own first conversation will read differently.
+
 ## Permissions and troubleshooting
 
 On macOS, allow the terminal or Python application to use the microphone in System Settings → Privacy & Security → Microphone. If the wrong input or output device is selected, choose it in macOS Sound settings before starting Vaani.
