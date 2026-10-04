@@ -4,7 +4,7 @@ import argparse
 import os
 
 from adapters import FasterWhisperRecognizer, OllamaModel, PiperSynthesizer, SileroTurnDetector
-from components import VoiceConversation
+from components import SpeechTextNormalizer, VoiceConversation
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -23,7 +23,8 @@ def main() -> None:
     conversation = VoiceConversation(
         SileroTurnDetector(), FasterWhisperRecognizer(args.whisper_model),
         OllamaModel(args.ollama_model, args.ollama_host),
-        PiperSynthesizer(args.piper, args.voice), args.language,
+        PiperSynthesizer(args.piper, args.voice),
+        SpeechTextNormalizer(), args.language,
     )
     print("Vaani is ready. Press Ctrl-C to stop.")
     try:

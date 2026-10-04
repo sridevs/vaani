@@ -17,7 +17,7 @@ class SileroTurnDetector(VoiceActivityDetector):
     """Records microphone audio for one conversational turn using Silero VAD."""
 
     def __init__(self, threshold: float = 0.5, silence_ms: int = 650) -> None:
-        self._vad = VADIterator(load_silero_vad(), sampling_rate=SAMPLE_RATE, threshold=threshold,
+        self._vad = VADIterator(load_silero_vad(onnx=True), sampling_rate=SAMPLE_RATE, threshold=threshold,
                                 min_silence_duration_ms=silence_ms)
 
     def record_turn(self) -> np.ndarray | None:

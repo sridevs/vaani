@@ -6,6 +6,18 @@ import numpy as np
 from adapters.silero_turn_detector import SileroTurnDetector
 
 
+def test_uses_onnx_backend_and_preserves_vad_settings():
+    with patch("adapters.silero_turn_detector.load_silero_vad") as loader, \
+         patch("adapters.silero_turn_detector.VADIterator") as iterator:
+        SileroTurnDetector(threshold=0.6, silence_ms=800)
+
+    loader.assert_called_once_with(onnx=True)
+    iterator.assert_called_once_with(
+        loader.return_value, sampling_rate=16_000, threshold=0.6,
+        min_silence_duration_ms=800,
+    )
+
+
 def _make_detector(mock_input_stream, vad_events):
     """Builds a detector whose VAD emits `vad_events` (cycled for every captured frame,
     across any number of `record_turn()` calls)."""

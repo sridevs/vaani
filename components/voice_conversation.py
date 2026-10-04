@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import numpy as np
 
+from components.speech_text_normalizer import SpeechTextNormalizer
 from ports import ConversationModel, Message, SpeechRecognizer, SpeechSynthesizer, VoiceActivityDetector
 
 
@@ -10,12 +11,14 @@ class VoiceConversation:
 
     def __init__(self, detector: VoiceActivityDetector, recognizer: SpeechRecognizer,
                  model: ConversationModel, synthesizer: SpeechSynthesizer,
+                 speech_text_normalizer: SpeechTextNormalizer,
                  language: str | None = None) -> None:
         self._detector = detector
         self._recognizer = recognizer
         self._model = model
         self._synthesizer = synthesizer
         self._language = language
+        self._speech_text_normalizer = speech_text_normalizer
         self._messages = [Message("system", "You are Vaani, a friendly local voice assistant.")]
 
     @property
@@ -35,6 +38,7 @@ class VoiceConversation:
             return None
         self._messages.append(Message("user", text))
         response = self._model.reply(self._messages)
+        normalized_response = self._speech_text_normalizer.normalize(response)
         self._messages.append(Message("assistant", response))
-        self._synthesizer.speak(response)
+        self._synthesizer.speak(normalized_response)
         return response

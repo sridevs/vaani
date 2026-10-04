@@ -57,7 +57,7 @@ Implementation is tracked in the
 
 ## Requirements
 
-- macOS with Python 3.11 or newer
+- macOS with Python 3.13 or 3.14 (Python 3.14 recommended)
 - [Ollama](https://ollama.com) with a local model already downloaded
 - A Piper executable and a Piper `.onnx` voice model
 - A microphone and speakers (headphones are recommended)
@@ -66,10 +66,10 @@ Implementation is tracked in the
 
 Install each dependency before running Vaani. These commands target macOS (Apple Silicon or Intel).
 
-**1. Python 3.11+** (skip if already installed):
+**1. Python 3.14** (skip if already installed):
 
 ```bash
-brew install python@3.11
+brew install python@3.14
 ```
 
 **2. Ollama** — the local LLM server, plus at least one chat model:
@@ -106,8 +106,11 @@ curl -L -o ~/piper-voices/en_US-lessac-medium.onnx.json \
 
 Create a virtual environment and install the Python dependencies:
 
+Silero VAD uses its ONNX backend to avoid TorchScript's Python 3.14
+compatibility limitation. ONNX Runtime is installed by `requirements.txt`.
+
 ```bash
-python3 -m venv .venv
+python3.14 -m venv .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
